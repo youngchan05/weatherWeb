@@ -8,17 +8,22 @@ function weather (){
             this.setLocation();
         },
         getLocation : function(){
-            navigator.geolocation.getCurrentPosition( this.saveLoacation , console.log('error'))
-        },
-        error:function(){
-            console.log(1111);
+            navigator.geolocation.getCurrentPosition( this.saveLoacation , this.getError)
         },
         saveLoacation : function(pos){
+            const _self = this;
             const posObj = {
                 latitude : pos.coords.latitude,
                 longitude : pos.coords.longitude,
             }
             localStorage.setItem(COORDS ,JSON.stringify(posObj))
+            getWeather(posObj)
+        },
+        getError: function(){
+            console.log('ERROR')
+        },
+        getWeather : function(pos){
+            console.log(pos)
         },
         setLocation : function(){
            if( localStorage.getItem(COORDS) === null) this.getLocation();
