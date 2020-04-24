@@ -5,23 +5,24 @@ function weather (){
     const WHEATHER = document.querySelector('.weather');
     return {
         init : function(){
-            this.location();
+            this.setLocation();
         },
         getLocation : function(){
-            navigator.geolocation.getCurrentPosition( pos =>{
-                const codeObj = {
-                    latitude : pos.coords.latitude,
-                    longitude : pos.coords.longitude
-                }
-                this.saveLoacation(codeObj);
-            })
+            navigator.geolocation.getCurrentPosition( this.saveLoacation , console.log('error'))
+        },
+        error:function(){
+            console.log(1111);
         },
         saveLoacation : function(pos){
-            localStorage.setItem(COORDS ,JSON.stringify(pos))
+            const posObj = {
+                latitude : pos.coords.latitude,
+                longitude : pos.coords.longitude,
+            }
+            localStorage.setItem(COORDS ,JSON.stringify(posObj))
         },
-        location : function(){
-            localStorage.getItem(COORDS) ? console.log('good')  : this.getLocation();
-        }
+        setLocation : function(){
+           if( localStorage.getItem(COORDS) === null) this.getLocation();
+        },
     }
 }
 const handelWeather = weather();
