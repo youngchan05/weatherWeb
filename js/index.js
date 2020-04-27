@@ -1,35 +1,36 @@
-
-function weather (){
-    const API_KEY = '59f55dcf0b2c981a05be562c29420cf2'; 
-    const COORDS = 'coords';
-    const WHEATHER = document.querySelector('.weather');
+function weather() {
+    const SEARCH_FORM = document.querySelector('.search-form');
+    const SEARCH_INPUT  = SEARCH_FORM.querySelector('input');
+    const API_KEY = "59f55dcf0b2c981a05be562c29420cf2";
+    const obj = {
+        
+    };
     return {
         init : function(){
-            this.setLocation();
+            this.search();
         },
-        getLocation : function(){
-            navigator.geolocation.getCurrentPosition( this.saveLoacation , this.getError)
-        },
-        saveLoacation : function(pos){
-            const _self = this;
-            const posObj = {
-                latitude : pos.coords.latitude,
-                longitude : pos.coords.longitude,
+        search : function(){
+            const _slef = this;
+            function inputText(e){
+                const  { value} =  e.target;
+                _slef.getWeather(value);
             }
-            localStorage.setItem(COORDS ,JSON.stringify(posObj))
-            getWeather(posObj)
+            SEARCH_FORM.addEventListener('change' , inputText);
         },
-        getError: function(){
-            console.log('ERROR')
+        getWeather : function(city){
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+            ).then(function(response){
+                return response.json();
+            })
+            .then(function(json){
+                console.log(json);
+                if(json.cod === "404") console.log('error 404')
+            })
         },
-        getWeather : function(pos){
-            console.log(pos)
-        },
-        setLocation : function(){
-           if( localStorage.getItem(COORDS) === null) this.getLocation();
-        },
-    }
+     }
 }
 const handelWeather = weather();
-handelWeather.init();
+handelWeather.init(); 
+
+
 
